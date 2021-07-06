@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+enum Services {
+    static let dBRealmService = DBRealmService()
+}
+
+enum TaskStatus {
+    case created
+    case completed
+    case deleted
+}

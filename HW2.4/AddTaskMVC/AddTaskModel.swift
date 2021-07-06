@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+class AddTaskModel {
+    
+    private let dbService: DBServiceProtocol = Services.dBRealmService
+    
+    func addTask(header: String, taskDescription: String, creationDate: String, deadline: String) {
+        dbService.addTask(header: header, taskDescription: taskDescription, creationDate: creationDate, deadline: deadline)
+    }
+    
+}

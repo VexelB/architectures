@@ -6,3 +6,20 @@
 //
 
 import Foundation
+import Bond
+import ReactiveKit
+
+class TasksViewModel {
+    private let dbService: DBServiceProtocol = Services.dBRealmService
+    
+    weak var tasksViewController: TasksViewController?
+    
+    func loadTasks() {
+        dbService.loadTasks() { [weak self] tasks in
+            self?.tasksViewController?.tasks.removeAll()
+            tasks.forEach { task in
+                self?.tasksViewController?.tasks.append(task)
+            }
+        }
+    }
+}

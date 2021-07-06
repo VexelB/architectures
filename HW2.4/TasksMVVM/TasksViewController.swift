@@ -6,24 +6,34 @@
 //
 
 import UIKit
+import Bond
+import ReactiveKit
 
 class TasksViewController: UIViewController {
-
+    @IBOutlet weak var tasksTableView: UITableView!
+    
+    var tasks = MutableObservableArray<TasksModel>()
+    
+    let tasksViewModel = TasksViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        tasksViewModel.tasksViewController = self
+        
+        tasks.bind(to: tasksTableView) { (dataSourse, indexPath, tableView) -> UITableViewCell in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TasksTableViewCell") as! TasksTableViewCell
+            let dateformatter = DateFormatter()
+            dateformatter.dateFormat = "yyyy'-'MM'-'dd' 'HH':'mm':'ssZZZ"
+            cell.initCell(id: dataSourse[indexPath.row].id, header: dataSourse[indexPath.row].header, taskDescription: dataSourse[indexPath.row].taskDescription, creationDate: dateformatter.date(from: dataSourse[indexPath.row].creationDate)!, deadline: dateformatter.date(from: dataSourse[indexPath.row].deadline)!)
+            return cell
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tasksViewModel.loadTasks()
     }
-    */
 
 }
